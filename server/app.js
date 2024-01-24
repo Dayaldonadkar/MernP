@@ -12,6 +12,9 @@ const DB = process.env.DATABASE;
 const port = process.env.PORT;
 const User = require("./model/userSchema");
 
+app.use(express.json());
+app.use(require("./router/auth"));
+
 // middlewares
 const middleware = (req, res, next) => {
   console.log("hi from middleware");
