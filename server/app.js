@@ -4,18 +4,12 @@ const express = require("express");
 
 const app = express();
 dotenv.config({ path: "./config.env" });
+require("./db/conn");
 // const DB =
 //   "mongodb+srv://dayaltweet:PfgHQlPGfjleSALX@cluster0.aypusxt.mongodb.net/?mernstack?retryWrites=true&w=majority";
 // console.log(process.env.DATABASE);
 const DB = process.env.DATABASE;
 const port = process.env.PORT;
-
-mongoose
-  .connect(DB)
-  .then(() => {
-    console.log("mongodb is connected");
-  })
-  .catch((err) => console.log(err));
 
 // middlewares
 const middleware = (req, res, next) => {
