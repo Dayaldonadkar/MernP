@@ -10,6 +10,7 @@ require("./db/conn");
 // console.log(process.env.DATABASE);
 const DB = process.env.DATABASE;
 const port = process.env.PORT;
+const User = require("./model/userSchema");
 
 // middlewares
 const middleware = (req, res, next) => {
