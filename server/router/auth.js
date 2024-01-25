@@ -1,5 +1,6 @@
 const express = require("express");
 const router = express.Router();
+const bcrypt = require("bcrypt");
 
 require("../db/conn");
 
@@ -22,6 +23,8 @@ router.post("/regist", async (req, res) => {
     const userExist = await User.findOne({ email: email });
     if (userExist) {
       return res.json({ message: "user already exist" });
+    } else if (password != cpassword) {
+      return res.json({ error: "cpassword is not same" });
     }
 
     const userData = new User({
@@ -48,11 +51,17 @@ router.post("/login", async (req, res) => {
     res.status(400).json({ error: "Email required" });
   }
 
-  const userLogin = await User.findOne({ email: email });
-  if (!userLogin) {
-    return res.status(440).json("user not registered");
+  const userExist = await User.findOne({ email: email });
+  if (userExist) {
+    // console.log(userExist.password, "-UserExist");
+    const isMatch = await bcrypt.compare(password, userExist.password);
+    if (!isMatch) {
+      return res.status(400).json({ error: "invalid credentials password" });
+    } else {
+      return res.status(200).json({ message: "login successfully" });
+    }
   } else {
-    return res.status(200).json("login successfully");
+    return res.status(400).json({ error: "invalid credentials email" });
   }
 });
 module.exports = router;
