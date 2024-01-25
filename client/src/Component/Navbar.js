@@ -1,12 +1,15 @@
 import React, { useState } from "react";
 import MenuIcon from "@mui/icons-material/Menu";
 import { Link } from "react-router-dom";
+
 const Navbar = () => {
   const [showNavbar, setshowNavbar] = useState(false);
   return (
     <div className="flex justify-center bg-[#F6F7FA] relative">
       <div className="flex justify-between w-[93%] xl:w-[85%] items-center py-3">
-        <h1>Dayal</h1>
+        <h1 className="text-xl font-bold uppercase">
+          Da<span className="text-[#0087F6]">yal</span>
+        </h1>
         <div className="hidden lg:block">
           <ul className="flex space-x-10">
             <Link to="/">

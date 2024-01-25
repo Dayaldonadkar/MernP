@@ -36,13 +36,13 @@ app.get("/contact", (req, res) => {
   res.send("hi from contact");
 });
 
-app.get("/login", (req, res) => {
-  res.send("hi from login");
-});
+// app.get("/login", (req, res) => {
+//   res.send("hi from login");
+// });
 
-app.get("/register", (req, res) => {
-  res.send("hi from login");
-});
+// app.get("/register", (req, res) => {
+//   res.send("hi from login");
+// });
 
 app.listen(port, () => {
   console.log(`port started on ${port}`);
