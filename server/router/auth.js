@@ -34,12 +34,28 @@ router.post("/regist", async (req, res) => {
     });
     const userRegister = await userData.save();
     if (userRegister) {
-      res.status(402).json({ message: "user created successfully" });
+      res.status(202).json({ message: "user created successfully" });
     }
   } catch (error) {
     console.log(error);
   }
 });
+
+router.post("/login", async (req, res) => {
+  // console.log(req.body);
+  const { email, password } = req.body;
+  if (!email || !password) {
+    res.status(400).json({ error: "Email required" });
+  }
+
+  const userLogin = await User.findOne({ email: email });
+  if (!userLogin) {
+    return res.status(440).json("user not registered");
+  } else {
+    return res.status(200).json("login successfully");
+  }
+});
+module.exports = router;
 
 // using promises
 // router.post("/regist", (req, res) => {
@@ -76,5 +92,4 @@ router.post("/regist", async (req, res) => {
 //     })
 //     .catch((error) => console.log(error));
 // });
-
-module.exports = router;
+// module.exports = router;
