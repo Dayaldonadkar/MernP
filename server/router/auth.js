@@ -58,6 +58,11 @@ router.post("/login", async (req, res) => {
     const isMatch = await bcrypt.compare(password, userExist.password);
 
     const token = await userExist.generateAuthToken();
+
+    res.cookie("jwtoken", token, {
+      expires: new Date(Date.now() + 22578090080),
+      httpOnly: true,
+    });
     if (!isMatch) {
       return res.status(400).json({ error: "invalid credentials password" });
     } else {
