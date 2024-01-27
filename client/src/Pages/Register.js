@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
+import { Link } from "react-router-dom";
 
 const meta = {
   title: "",
@@ -27,6 +28,26 @@ const Register = () => {
     console.log(value);
     setUser({ ...user, [name]: value });
   };
+
+  const PostData = async (e) => {
+    e.preventDefault();
+    const { name, email, phone, work, password, cpassword } = user;
+    const res = await fetch("/regist", {
+      method: "POST",
+      headers: {
+        "content-type": "application/json",
+      },
+      body: JSON.stringify({ name, email, phone, work, password, cpassword }),
+    });
+    const data = await res.json();
+    if (res.status === 422) {
+      console.log("login Failure");
+      window.alert("registration failed");
+    } else {
+      console.log("registration successful");
+      window.alert("registration successfull");
+    }
+  };
   return (
     <React.Fragment>
       <HelmetProvider>
@@ -49,7 +70,7 @@ const Register = () => {
                 Start your journey with our product
               </p>
             </div>
-            <form action="">
+            <form method="POST">
               <div className="mb-6">
                 <label className="block mb-2 text-coolGray-800 font-medium">
                   Name*
@@ -133,28 +154,22 @@ const Register = () => {
                   onChange={handleInputs}
                 />
               </div>
-              <a
+              <button
+                onClick={PostData}
                 className="inline-block py-3 px-7 mb-4 w-full text-base text-green-50 font-medium text-center leading-6 bg-green-500 hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 rounded-md shadow-sm"
-                href="#"
               >
-                Sign Up
-              </a>
-              <a
-                className="inline-flex items-center justify-center py-3 px-7 mb-6 w-full text-base text-coolGray-500 font-medium text-center leading-6 bg-white border border-coolGray-100 hover:border-coolGray-200 rounded-md shadow-sm"
-                href="#"
-              >
-                <span>Sign in with Google</span>
-              </a>
+                Register
+              </button>
+
               <p className="text-center">
                 <span className="text-xs font-medium">
                   Already have an account?
                 </span>
-                <a
-                  className="inline-block text-xs font-medium text-green-500 hover:text-green-600 hover:underline"
-                  href="#"
-                >
-                  Sign In
-                </a>
+                <Link to="/login">
+                  <button className="inline-block text-xs font-medium text-green-500 hover:text-green-600 hover:underline pl-1">
+                    Sign In
+                  </button>
+                </Link>
               </p>
             </form>
           </div>
