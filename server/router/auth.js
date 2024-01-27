@@ -22,10 +22,11 @@ router.post("/regist", async (req, res) => {
   }
   try {
     const userExist = await User.findOne({ email: email });
-    if (userExist) {
-      return res.status(422).json({ message: "user already exist" });
+    const phoneExist = await User.findOne({ phone: phone });
+    if (userExist || phoneExist) {
+      return res.status(409).json({ message: "user already exist" });
     } else if (password != cpassword) {
-      return res.status(422).json({ error: "cpassword is not same" });
+      return res.status(409).json({ error: "cpassword is not same" });
     } else {
       const userData = new User({
         name,

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Link } from "react-router-dom";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 
 const meta = {
   title: "",
@@ -11,6 +12,7 @@ const meta = {
 };
 
 const Register = () => {
+  const [showPassword, setShowPassword] = useState(true);
   const [user, setUser] = useState({
     name: "",
     email: "",
@@ -40,9 +42,9 @@ const Register = () => {
       body: JSON.stringify({ name, email, phone, work, password, cpassword }),
     });
     const data = await res.json();
-    if (res.status === 422) {
-      console.log("login Failure");
-      window.alert("registration failed");
+    if (res.status === 409) {
+      console.log("Username already exist");
+      window.alert("Email already exist");
     } else {
       console.log("registration successful");
       window.alert("registration successfull");
@@ -94,6 +96,7 @@ const Register = () => {
                 <input
                   className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-md placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                   name="email"
+                  type="email"
                   placeholder="Your Email"
                   value={user.email}
                   onChange={handleInputs}
@@ -132,14 +135,19 @@ const Register = () => {
                 <label className="block mb-2 text-coolGray-800 font-medium">
                   Password*
                 </label>
-                <input
-                  className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-md placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                  placeholder="************"
-                  name="password"
-                  type="password"
-                  value={user.password}
-                  onChange={handleInputs}
-                />
+                <div className="flex justify-between items-center appearance-none w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-md placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                  <input
+                    className="outline-none w-[100%] h-[100%]"
+                    placeholder="************"
+                    name="password"
+                    type={showPassword ? "password" : "text"}
+                    value={user.password}
+                    onChange={handleInputs}
+                  />
+                  <div onClick={() => setShowPassword(!showPassword)}>
+                    <RemoveRedEyeIcon />
+                  </div>
+                </div>
               </div>
               <div className="mb-4">
                 <label className="block mb-2 text-coolGray-800 font-medium">
