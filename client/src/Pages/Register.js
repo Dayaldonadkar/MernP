@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
-import { Link } from "react-router-dom";
+import { Link, useHistory, useNavigate } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import RemoveRedEye from "@mui/icons-material/RemoveRedEye";
 
 const meta = {
   title: "",
@@ -12,6 +14,7 @@ const meta = {
 };
 
 const Register = () => {
+  const navigate = useNavigate();
   const [showPassword, setShowPassword] = useState(true);
   const [user, setUser] = useState({
     name: "",
@@ -42,12 +45,14 @@ const Register = () => {
       body: JSON.stringify({ name, email, phone, work, password, cpassword }),
     });
     const data = await res.json();
+    console.log("from registration", data);
     if (res.status === 409) {
       console.log("Username already exist");
       window.alert("Email already exist");
     } else {
       console.log("registration successful");
       window.alert("registration successfull");
+      navigate("/login");
     }
   };
   return (
@@ -145,7 +150,11 @@ const Register = () => {
                     onChange={handleInputs}
                   />
                   <div onClick={() => setShowPassword(!showPassword)}>
-                    <RemoveRedEyeIcon />
+                    {showPassword ? (
+                      <RemoveRedEyeIcon fontSize="smaller" />
+                    ) : (
+                      <VisibilityOffIcon fontSize="smaller" />
+                    )}
                   </div>
                 </div>
               </div>
