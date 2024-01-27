@@ -1,6 +1,9 @@
 import React, { useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Link, useNavigate } from "react-router-dom";
+import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
+import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
+import RemoveRedEye from "@mui/icons-material/RemoveRedEye";
 
 const meta = {
   title: "",
@@ -11,6 +14,10 @@ const meta = {
 };
 
 const Login = () => {
+  const [showPassword, setShowPassword] = useState({
+    password: true,
+    cpassword: false,
+  });
   const navigate = useNavigate();
   const [user, setUser] = useState({ email: "", password: "" });
   let name;
@@ -96,13 +103,31 @@ const Login = () => {
                 >
                   Password
                 </label>
-                <input
-                  className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-md placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                  type="password"
-                  name="password"
-                  placeholder="************"
-                  onChange={handleInput}
-                />
+
+                <div className="flex justify-between items-center appearance-none w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-md placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50">
+                  <input
+                    className="outline-none w-[100%] h-[100%]"
+                    placeholder="************"
+                    name="password"
+                    type={showPassword.password ? "password" : "text"}
+                    value={user.password}
+                    onChange={handleInput}
+                  />
+                  <div
+                    onClick={() =>
+                      setShowPassword({
+                        ...showPassword,
+                        password: !showPassword.password,
+                      })
+                    }
+                  >
+                    {showPassword.password ? (
+                      <RemoveRedEyeIcon fontSize="smaller" />
+                    ) : (
+                      <VisibilityOffIcon fontSize="smaller" />
+                    )}
+                  </div>
+                </div>
               </div>
               <div className="flex flex-wrap items-center justify-between mb-6"></div>
               <button
