@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 const meta = {
@@ -10,6 +10,23 @@ const meta = {
 };
 
 const Register = () => {
+  const [user, setUser] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    work: "",
+    password: "",
+    cpassword: "",
+  });
+  let name;
+  let value;
+  const handleInputs = (e) => {
+    name = e.target.name;
+    console.log(name);
+    value = e.target.value;
+    console.log(value);
+    setUser({ ...user, [name]: value });
+  };
   return (
     <React.Fragment>
       <HelmetProvider>
@@ -34,16 +51,16 @@ const Register = () => {
             </div>
             <form action="">
               <div className="mb-6">
-                <label
-                  className="block mb-2 text-coolGray-800 font-medium"
-                  htmlFor=""
-                >
+                <label className="block mb-2 text-coolGray-800 font-medium">
                   Name*
                 </label>
                 <input
                   className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-md placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                   type="name"
                   placeholder="Your Name"
+                  name="name"
+                  value={user.name}
+                  onChange={handleInputs}
                 />
               </div>
               <div className="mb-6">
@@ -55,37 +72,25 @@ const Register = () => {
                 </label>
                 <input
                   className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-md placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                  type="name"
+                  name="email"
                   placeholder="Your Email"
+                  value={user.email}
+                  onChange={handleInputs}
                 />
               </div>
               <div className="mb-4">
-                <label
-                  className="block mb-2 text-coolGray-800 font-medium"
-                  htmlFor=""
-                >
-                  Password*
+                <label className="block mb-2 text-coolGray-800 font-medium">
+                  Phone
                 </label>
                 <input
                   className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-md placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                  type="password"
-                  placeholder="************"
+                  type="Number"
+                  name="phone"
+                  placeholder="Your Phone"
+                  value={user.phone}
+                  onChange={handleInputs}
                 />
               </div>
-              <div className="mb-4">
-                <label
-                  className="block mb-2 text-coolGray-800 font-medium"
-                  htmlFor=""
-                >
-                  Confirm Password
-                </label>
-                <input
-                  className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-md placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                  type="password"
-                  placeholder="************"
-                />
-              </div>
-
               <div className="mb-4">
                 <label
                   className="block mb-2 text-coolGray-800 font-medium"
@@ -96,24 +101,38 @@ const Register = () => {
                 <input
                   className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-md placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
                   type="text"
+                  name="work"
                   placeholder="Work"
+                  value={user.work}
+                  onChange={handleInputs}
                 />
               </div>
-
               <div className="mb-4">
-                <label
-                  className="block mb-2 text-coolGray-800 font-medium"
-                  htmlFor=""
-                >
-                  phone
+                <label className="block mb-2 text-coolGray-800 font-medium">
+                  Password*
                 </label>
                 <input
                   className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-md placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
-                  type="Number"
-                  placeholder="Your Phone"
+                  placeholder="************"
+                  name="password"
+                  type="password"
+                  value={user.password}
+                  onChange={handleInputs}
                 />
               </div>
-
+              <div className="mb-4">
+                <label className="block mb-2 text-coolGray-800 font-medium">
+                  Confirm Password
+                </label>
+                <input
+                  className="appearance-none block w-full p-3 leading-5 text-coolGray-900 border border-coolGray-200 rounded-lg shadow-md placeholder-coolGray-400 focus:outline-none focus:ring-2 focus:ring-green-500 focus:ring-opacity-50"
+                  type="password"
+                  placeholder="************"
+                  name="cpassword"
+                  value={user.cpassword}
+                  onChange={handleInputs}
+                />
+              </div>
               <a
                 className="inline-block py-3 px-7 mb-4 w-full text-base text-green-50 font-medium text-center leading-6 bg-green-500 hover:bg-green-600 focus:ring-2 focus:ring-green-500 focus:ring-opacity-50 rounded-md shadow-sm"
                 href="#"
@@ -124,11 +143,6 @@ const Register = () => {
                 className="inline-flex items-center justify-center py-3 px-7 mb-6 w-full text-base text-coolGray-500 font-medium text-center leading-6 bg-white border border-coolGray-100 hover:border-coolGray-200 rounded-md shadow-sm"
                 href="#"
               >
-                <img
-                  className="mr-2"
-                  src="flex-ui-assets/elements/sign-up/google-icon-sign-up.svg"
-                  alt=""
-                />
                 <span>Sign in with Google</span>
               </a>
               <p className="text-center">
