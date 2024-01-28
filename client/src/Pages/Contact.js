@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Helmet, HelmetProvider } from "react-helmet-async";
 
 const meta = {
@@ -9,7 +9,28 @@ const meta = {
   script: [],
 };
 
-export default function Index() {
+const Contact = () => {
+  const [userData, setUserData] = useState({});
+  const callAboutPage = async () => {
+    try {
+      const res = await fetch("/getdata", {
+        method: "GET",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        credentials: "include",
+      });
+
+      const data = await res.json();
+      console.log(data);
+      setUserData(data);
+    } catch (err) {}
+  };
+
+  useEffect(() => {
+    callAboutPage();
+  }, []);
+
   return (
     <React.Fragment>
       <HelmetProvider>
@@ -144,21 +165,19 @@ export default function Index() {
                 <h3 className="text-3xl tracking-tight mb-8">Contact Us</h3>
                 <form action="">
                   <input
+                    value={userData.name}
                     className="block w-full py-4 px-8 h-16 mb-6 text-coolGray-500 bg-white border border-coolGray-400 rounded-full"
                     type="text"
-                    placeholder="First Name*"
+                    placeholder="Name"
                   />
                   <input
-                    className="block w-full py-4 px-8 h-16 mb-6 text-coolGray-500 bg-white border border-coolGray-400 rounded-full"
-                    type="text"
-                    placeholder="Last Name*"
-                  />
-                  <input
+                    value={userData.email}
                     className="block w-full py-4 px-8 h-16 mb-6 text-coolGray-500 bg-white border border-coolGray-400 rounded-full"
                     type="email"
                     placeholder="E-mail"
                   />
                   <input
+                    value={userData.phone}
                     className="block w-full py-4 px-8 h-16 mb-6 text-coolGray-500 bg-white border border-coolGray-400 rounded-full"
                     type="text"
                     placeholder="Phone number"
@@ -204,4 +223,6 @@ export default function Index() {
       </section>
     </React.Fragment>
   );
-}
+};
+
+export default Contact;

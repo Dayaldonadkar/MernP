@@ -82,6 +82,10 @@ router.post("/login", async (req, res) => {
 router.get("/about", authenticate, (req, res) => {
   res.send(req.rootUser);
 });
+
+router.get("/getData", authenticate, (req, res) => {
+  res.send(req.rootUser);
+});
 module.exports = router;
 
 // using promises

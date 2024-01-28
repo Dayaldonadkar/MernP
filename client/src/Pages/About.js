@@ -29,7 +29,13 @@ const About = () => {
 
   return (
     <div>
-      <form method="GET">about</form>
+      <form method="GET">
+        <h1>{userData.name}</h1>
+        <p>{userData.work}</p>
+        <p>{userData.email}</p>
+        <p>{userData._id}</p>
+        <p>{userData.phone}</p>
+      </form>
     </div>
   );
 };
