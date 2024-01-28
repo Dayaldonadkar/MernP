@@ -49,34 +49,38 @@ router.post("/regist", async (req, res) => {
 
 router.post("/login", async (req, res) => {
   // console.log(req.body);
-  const { email, password } = req.body;
-  if (!email || !password) {
-    res.status(400).json({ error: "Email required" });
-  }
-
-  const userExist = await User.findOne({ email: email });
-  if (userExist) {
-    // console.log(userExist.password, "-UserExist");
-    const isMatch = await bcrypt.compare(password, userExist.password);
-
-    const token = await userExist.generateAuthToken();
-
-    res.cookie("jwtoken", token, {
-      expires: new Date(Date.now() + 22578090080),
-      httpOnly: true,
-    });
-    if (!isMatch) {
-      return res.status(401).json({ error: "invalid credentials password" });
-    } else {
-      return res.status(200).json({ message: "login successfully" });
+  try {
+    let token;
+    const { email, password } = req.body;
+    if (!email || !password) {
+      res.status(400).json({ error: "Email required" });
     }
-  } else {
-    return res.status(400).json({ error: "invalid credentials email" });
+
+    const userExist = await User.findOne({ email: email });
+    if (userExist) {
+      // console.log(userExist.password, "-UserExist");
+      const isMatch = await bcrypt.compare(password, userExist.password);
+      if (!isMatch) {
+        return res.status(401).json({ error: "invalid credentials password" });
+      } else {
+        token = await userExist.generateAuthToken();
+        console.log(token, "token from auth");
+        res.cookie("jwtoke", token, {
+          expires: new Date(Date.now() + 22578090080),
+          httpOnly: true,
+        });
+        return res.status(200).json({ message: "login successfully" });
+      }
+    } else {
+      return res.status(400).json({ error: "invalid credentials email" });
+    }
+  } catch (error) {
+    console.log(error);
   }
 });
 
-router.get("/about", authenticate, (res, req) => {
-  res.send("hi from about page");
+router.get("/about", authenticate, (req, res) => {
+  res.send(req.rootUser);
 });
 module.exports = router;
 
