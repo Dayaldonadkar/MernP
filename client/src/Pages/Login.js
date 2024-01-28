@@ -3,7 +3,6 @@ import { Helmet, HelmetProvider } from "react-helmet-async";
 import { Link, useNavigate } from "react-router-dom";
 import RemoveRedEyeIcon from "@mui/icons-material/RemoveRedEye";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
-import RemoveRedEye from "@mui/icons-material/RemoveRedEye";
 
 const meta = {
   title: "",
@@ -43,9 +42,9 @@ const Login = () => {
     const data = await res.json();
     console.log("from login", data);
     if (res.status === 401) {
-      window.alert("invalid email");
+      window.alert("invalid password");
     } else if (res.status === 400) {
-      window.alert("incorrect password");
+      window.alert("incorrect email");
     } else {
       window.alert("login successfully");
       navigate("/");

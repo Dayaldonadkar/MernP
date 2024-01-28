@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const bcrypt = require("bcrypt");
 const jwt = require("jsonwebtoken");
+const authenticate = require("../middleware/authenticate");
 
 require("../db/conn");
 
@@ -65,13 +66,17 @@ router.post("/login", async (req, res) => {
       httpOnly: true,
     });
     if (!isMatch) {
-      return res.status(400).json({ error: "invalid credentials password" });
+      return res.status(401).json({ error: "invalid credentials password" });
     } else {
       return res.status(200).json({ message: "login successfully" });
     }
   } else {
     return res.status(400).json({ error: "invalid credentials email" });
   }
+});
+
+router.get("/about", authenticate, (res, req) => {
+  res.send("hi from about page");
 });
 module.exports = router;
 
