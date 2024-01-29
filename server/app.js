@@ -32,9 +32,9 @@ app.get("/about", middleware, (req, res) => {
   console.log("hi from about");
 });
 
-app.get("/contact", (req, res) => {
-  res.send("hi from contact");
-});
+// app.get("/contact", (req, res) => {
+//   res.send("hi from contact");
+// });
 
 // app.get("/login", (req, res) => {
 //   res.send("hi from login");

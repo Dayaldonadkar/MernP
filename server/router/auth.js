@@ -86,41 +86,32 @@ router.get("/about", authenticate, (req, res) => {
 router.get("/getData", authenticate, (req, res) => {
   res.send(req.rootUser);
 });
+
+router.post("/contact", authenticate, async (req, res) => {
+  try {
+    const { name, email, phone, message } = req.body;
+
+    if (!name || !email || !phone || !message) {
+      console.log("error in contact form");
+      return res.json({ error: "plzz filled the contact form " });
+    }
+
+    const userContact = await User.findOne({ _id: req.userID });
+
+    if (userContact) {
+      const userMessage = await userContact.addMessage(
+        name,
+        email,
+        phone,
+        message
+      );
+
+      await userContact.save();
+
+      res.status(201).json({ message: "user Contact successfully" });
+    }
+  } catch (error) {
+    console.log(error);
+  }
+});
 module.exports = router;
-
-// using promises
-// router.post("/regist", (req, res) => {
-//   // console.log(req.body);
-//   // res.json({ message: req.body });
-//   const { name, email, phone, work, password, cpassword } = req.body;
-//   console.log(name);
-//   if ((!name, !email, !phone, !work, !password, !cpassword)) {
-//     // return res.json({ message: "Fill all details properly" });
-//     return res.status(422).json({ message: "Fill all details properly" });
-//   }
-
-//   User.findOne({ email: email })
-//     .then((userExist) => {
-//       if (userExist) {
-//         return res.status(422).json({ message: "email already exist" });
-//       }
-
-//       const use = new User({
-//         name,
-//         email,
-//         phone,
-//         work,
-//         password,
-//         cpassword,
-//       });
-
-//       use
-//         .save()
-//         .then(() => {
-//           res.status(201).json("user created");
-//         })
-//         .catch((err) => res.status(500).json({ message: "database erroe" }));
-//     })
-//     .catch((error) => console.log(error));
-// });
-// module.exports = router;

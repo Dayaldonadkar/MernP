@@ -10,26 +10,79 @@ const meta = {
 };
 
 const Contact = () => {
-  const [userData, setUserData] = useState({});
-  const callAboutPage = async () => {
+  const [userData, setUserData] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    message: "",
+  });
+  const userContact = async () => {
     try {
       const res = await fetch("/getdata", {
         method: "GET",
         headers: {
           "Content-Type": "application/json",
         },
-        credentials: "include",
       });
 
       const data = await res.json();
       console.log(data);
-      setUserData(data);
-    } catch (err) {}
+      setUserData({
+        ...userData,
+        name: data.name,
+        email: data.email,
+        phone: data.phone,
+      });
+
+      if (!res.status === 200) {
+        const error = new Error(res.error);
+        throw error;
+      }
+    } catch (err) {
+      console.log(err);
+    }
   };
 
   useEffect(() => {
-    callAboutPage();
+    userContact();
   }, []);
+
+  const handleInputs = (e) => {
+    const name = e.target.name;
+    const value = e.target.value;
+
+    setUserData({ ...userData, [name]: value });
+  };
+
+  //  send the data to backend
+
+  const contactForm = async (e) => {
+    e.preventDefault();
+
+    const { name, email, phone, message } = userData;
+
+    const res = await fetch("/contact", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        name,
+        email,
+        phone,
+        message,
+      }),
+    });
+
+    const data = await res.json();
+
+    if (!data) {
+      console.log("message not send ");
+    } else {
+      alert("Message Send");
+      setUserData({ ...userData, message: "" });
+    }
+  };
 
   return (
     <React.Fragment>
@@ -163,56 +216,61 @@ const Contact = () => {
             <div className="w-full lg:w-1/2 xl:w-7/12 px-4">
               <div className="max-w-lg lg:max-w-none mx-auto py-12 px-8 md:px-10 bg-white rounded-4xl">
                 <h3 className="text-3xl tracking-tight mb-8">Contact Us</h3>
-                <form action="">
-                  <input
-                    value={userData.name}
-                    className="block w-full py-4 px-8 h-16 mb-6 text-coolGray-500 bg-white border border-coolGray-400 rounded-full"
-                    type="text"
-                    placeholder="Name"
-                  />
-                  <input
-                    value={userData.email}
-                    className="block w-full py-4 px-8 h-16 mb-6 text-coolGray-500 bg-white border border-coolGray-400 rounded-full"
-                    type="email"
-                    placeholder="E-mail"
-                  />
-                  <input
-                    value={userData.phone}
-                    className="block w-full py-4 px-8 h-16 mb-6 text-coolGray-500 bg-white border border-coolGray-400 rounded-full"
-                    type="text"
-                    placeholder="Phone number"
-                  />
-                  <div className="relative">
-                    <span className="absolute top-1/2 right-0 mr-10 transform -translate-y-1/2">
-                      <svg
-                        width={12}
-                        height={8}
-                        viewBox="0 0 12 8"
-                        fill="none"
-                        xmlns="http://www.w3.org/2000/svg"
-                      >
-                        <path
-                          d="M1.33203 1.66439L5.9987 6.33105L10.6654 1.66439"
-                          stroke="black"
-                          strokeWidth="1.5"
-                          strokeLinecap="round"
-                          strokeLinejoin="round"
-                        />
-                      </svg>
-                    </span>
+                <form method="POST" id="contact_form">
+                  <div className="contact_form_inputs d-flex flex-md-row flex-column justify-content-between align-items-between">
+                    <input
+                      type="text"
+                      id="contact_form_name"
+                      className="contact_form_name input_field"
+                      name="name"
+                      value={userData.name}
+                      onChange={handleInputs}
+                      placeholder="Your name"
+                      required
+                    />
+
+                    <input
+                      type="email"
+                      id="contact_form_email"
+                      className="contact_form_email input_field"
+                      name="email"
+                      value={userData.email}
+                      onChange={handleInputs}
+                      placeholder="Your Email"
+                      required
+                    />
+
+                    <input
+                      type="number"
+                      id="contact_form_phone"
+                      className="contact_form_phone input_field"
+                      name="phone"
+                      value={userData.phone}
+                      onChange={handleInputs}
+                      placeholder="Your Phone Number"
+                      required
+                    />
                   </div>
-                  <textarea
-                    className="w-full h-52 py-5 px-8 text-coolGray-500 bg-white border border-coolGray-400 rounded-3xl resize-none mb-8"
-                    placeholder="Message"
-                    rows={3}
-                    defaultValue={""}
-                  />
-                  <div className="sm:text-right">
+
+                  <div className="contact_form_text mt-5">
+                    <textarea
+                      className="text_field contact_form_message"
+                      name="message"
+                      value={userData.message}
+                      onChange={handleInputs}
+                      placeholder="Message"
+                      cols="30"
+                      rows="10"
+                    ></textarea>
+                  </div>
+
+                  <div className="contact_form_button">
                     <button
-                      className="inline-block w-full sm:w-auto py-5 px-8 sm:px-24 text-center font-medium text-white leading-none bg-black hover:bg-blue-500 rounded-full transition duration-150"
                       type="submit"
+                      className="button contact_submit_button"
+                      onClick={contactForm}
                     >
-                      Send message
+                      Send Message
                     </button>
                   </div>
                 </form>
